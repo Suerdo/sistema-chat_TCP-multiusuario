@@ -9,30 +9,33 @@ class ClientHandler extends Thread {
     DataOutputStream out;
     Socket clientSocket;
 
+    // Construtor: associa o socket e inicializa streams de entrada/saída
     public ClientHandler(Socket aClientSocket) {
         try {
             clientSocket = aClientSocket;
             in = new DataInputStream(clientSocket.getInputStream());
             out = new DataOutputStream(clientSocket.getOutputStream());
         } catch (IOException e) {
-            System.out.println("Connection:" + e.getMessage());
+            System.out.println("Connection: " + e.getMessage());
         }
     }
 
+    // Executa a lógica de comunicação com o cliente
     public void run() {
-        try { // an echo server
-            String data = in.readUTF(); // read a line of data from the stream
+        try {
+            String data = in.readUTF(); // Lê mensagem do cliente
             System.out.println("Mensagem recebida: " + data);
-            out.writeUTF(data.toUpperCase());
+            out.writeUTF(data.toUpperCase()); // Retorna resposta em maiúsculas
         } catch (EOFException e) {
-            System.out.println("EOF:" + e.getMessage());
+            System.out.println("EOF: " + e.getMessage());
         } catch (IOException e) {
-            System.out.println("readline:" + e.getMessage());
+            System.out.println("readline: " + e.getMessage());
         } finally {
             try {
-                clientSocket.close();
+                clientSocket.close(); // Fecha conexão ao finalizar
             } catch (IOException e) {
-                /* close failed */}
+                // Falha ao fechar
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ import java.io.*;
 public class MultiTCPServer {
     public static void main(String args[]) {
         try {
-            int serverPort = 6666; // the server port
+            int serverPort = 6666; 
             ServerSocket serverSocket = new ServerSocket(serverPort);
             while (serverSocket.isBound()) {
                 System.out.println("Aguardando conexao no endereco: " + InetAddress.getLocalHost() + ":" + serverPort);

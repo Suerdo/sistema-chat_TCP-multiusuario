@@ -10,49 +10,48 @@ public class SimpleTCPServer {
     private DataInputStream input;
     private DataOutputStream output;
 
+    // Inicia o servidor TCP na porta especificada
     public void start(int port) throws IOException {
-        // Cria server socket para aguardar conexoes de clientes em loop
         System.out.println("[S1] Criando server socket para aguardar conexões de clientes em loop");
         serverSocket = new ServerSocket(port);
+
         while (serverSocket.isBound()) {
-            
-            // Aguarda conexao de novo cliente (bloqueante)
             System.out.println("[S2] Aguardando conexão em: " + serverSocket.getLocalSocketAddress());
-            socket = serverSocket.accept();
-            
-            // Conexao estabelecida, obtem canais de entrada e saida de dados com cliente
-            System.out.println("[S3] Conexão estalecida com cliente:" + socket.getRemoteSocketAddress());
+            socket = serverSocket.accept(); // Aguarda e aceita conexão de cliente
+
+            System.out.println("[S3] Conexão estabelecida com cliente: " + socket.getRemoteSocketAddress());
+
             input = new DataInputStream(socket.getInputStream());
             output = new DataOutputStream(socket.getOutputStream());
-            
-            // Recebe mensagem do cliente do canal de entrada
-            String msg = input.readUTF();
+
+            String msg = input.readUTF(); // Lê mensagem do cliente
             System.out.println("[S4] Mensagem recebida de " + socket.getRemoteSocketAddress() + ": " + msg);
-            
-            // Envia resposta ao cliente no canal de saida
-            String reply = msg.toUpperCase();
-            output.writeUTF(reply);
+
+            String reply = msg.toUpperCase(); // Processa resposta
+            output.writeUTF(reply); // Envia resposta ao cliente
+
             System.out.println("[S5] Mensagem enviada para " + socket.getRemoteSocketAddress() + ": " + reply);
         }
     }
 
+    // Encerra conexões e libera recursos
     public void stop() throws IOException {
         input.close();
         output.close();
         socket.close();
         serverSocket.close();
     }
+
+    // Ponto de entrada do servidor
     public static void main(String[] args) {
         int serverPort = 6666;
         try {
-            // Inicia e roda servidor
             SimpleTCPServer server = new SimpleTCPServer();
             server.start(serverPort);
-
-            // Finaliza servidor
             server.stop();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 }
+
