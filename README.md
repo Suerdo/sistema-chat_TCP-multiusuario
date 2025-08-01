@@ -33,4 +33,4 @@ java labs/lab-sockets/src/ChatClient
 ### Compilação
     
     javac labs/lab-sockets/src/ChatServer.java 
-    labs/lab-sockets/src/ChatClient.java
+    javac labs/lab-sockets/src/ChatClient.java
